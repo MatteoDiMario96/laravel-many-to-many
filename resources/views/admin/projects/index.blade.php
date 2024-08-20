@@ -28,8 +28,8 @@
             <th scope="col">ID</th>
             <th scope="col">Type</th>
             <th scope="col">Name</th>
+            <th scope="col">Technologies</th>
             <th scope="col">Project created in date :</th>
-            <th scope="col">Programming languages used :</th>
             <th scope="col" class="text-center">Action</th>
         </tr>
     </thead>
@@ -39,10 +39,27 @@
 
     <tr>
         <th scope="row">{{$project->id}}</th>
-        <td>{{$project->type->name}}</td>
+        <td>
+            @if($project->type)
+                {{$project->type->name}}
+            @else
+                <em>No type assigned</em>
+            @endif
+        </td>
         <td>{{$project->name}}</td>
+        <td>
+        @forelse ($project->technologies as $technology )
+            @if ($loop->last)
+                {{$technology->name}}
+            @else
+                {{$technology->name}},
+            @endif
+
+        @empty
+            <td> No technologies </td>
+        @endforelse
+        </td>
         <td>{{$project->project_created_at}}</td>
-        <td>{{$project->languages_programming_used}}</td>
         <td class="text-center">
             <a href="{{route('admin.projects.show', $project)}}" class="btn btn-info btn-sm m-2">Details</a>
             <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-success btn-sm m-2">Edit</a>

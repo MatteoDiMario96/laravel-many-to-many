@@ -16,9 +16,16 @@
             <img src="{{$project->image_url}}" class="card-img-top fluid" alt="...">
         </div>
     <div class="card-body">
-        <h5 class="card-title">{{$project->languages_programming_used}}</h5>
+        <h5 class="card-title">@foreach ($project->technologies as $technology )
+            @if ($loop->last)
+                {{$technology->name}}
+            @else
+                {{$technology->name}} -
+            @endif
+        @endforeach</h5>
         <strong><p class="card-text">Created in date: {{$project->project_created_at}}</p></strong>
         <p class="card-text">Note:{{$project->note}}</p>
+        <p>{{$project->type->name}}</p>
         <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-success">Edit {{$project->name}}</a>
         <form action="{{route('admin.projects.softDelete', $project)}}" method="POST" class="d-inline-block forms-destroy">
             @csrf

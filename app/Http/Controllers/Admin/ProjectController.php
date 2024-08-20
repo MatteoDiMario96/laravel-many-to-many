@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,21 +22,31 @@ class ProjectController extends Controller
     }
     public function create(){
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
     public function store(StoreProjectRequest $request){
         $data = $request->validated();
         $newProject = new Project($data);
         $newProject->save();
-        return redirect()->view('admin.projects.show', $newProject);
+        if (isset($data['technologies'])) {
+        $newProject->technologies()->sync($data['technologies']);
+        }
+        return redirect()->route('admin.projects.show', $newProject);
     }
     public function edit(Project $project){
         $types = Type::all();
-        return view('admin.projects.edit',compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit',compact('project', 'types', 'technologies'));
     }
     public function update(UpdateProjectRequest $request, Project $project){
         $data = $request->validated();
+        // Salva le tecnologie associate
+        if (isset($data['technologies'])) {
+        $project->technologies()->sync($data['technologies']);
+        }
         $project->update($data);
+
         return redirect()->route('admin.projects.show', $project)->with('edit-project', $project->name . ' '. 'has been edited with success');
     }
     public function softDeleteIndex(){

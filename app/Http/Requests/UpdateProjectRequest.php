@@ -24,8 +24,10 @@ class UpdateProjectRequest extends FormRequest
         return [
             //Mettere regole
             'name' => ['required',  'min:3', 'max:150'],  //Rule::unique("projects")->ignore($this->route("project")) per fare valere unique.
-            'note' => ['max:1000']
-
+            'note' => ['max:1000'],
+            'project_created_at' => ['required', 'date'],
+            'type_id' => ['required'],
+            'technologies' => ['required', 'array', 'exists:technologies,id'],
         ];
     }
 

@@ -26,7 +26,7 @@
         </div>
         <div class="col-6">
             <label for="inputAddress" class="form-label">Project created in date: </label>
-            <input type="date" class="form-control" id="project-class" name="class" value="@yield('value-data')">
+            <input type="date" class="form-control" id="project-class" name="project_created_at" value="@yield('value-data')">
         </div>
         {{-- <div class="col-6">
             <label for="inputAddress2" class="form-label">languages_programming_used</label>
@@ -37,10 +37,11 @@
             <input type="text" class="form-control" id="image-url" name="image_url" value="@yield('value-image')" class="mb-3">
         </div> --}}
         <div class="col-12">
-            <select class="form-select" aria-label="Default select example" name="type_id">
-                <option selected>Select the Type of Project</option>
+            <label for="type-project" class="form-label">Select the Type of Project</label>
+            <select class="form-select" aria-label="Default select example" name="type_id" >
                 @foreach ($types as $type)
-                <option value="{{$type->id}}">{{$type->name}}</option>
+                <option value="{{ $type->id }}" {{ old('type_id', isset($project) ? $project->type_id : '') == $type->id ? 'selected' : '' }}>
+                    {{ $type->name }}
                 @endforeach
             </select>
         </div>
@@ -48,9 +49,17 @@
             <label for="inputAddress2" class="form-label">Note</label>
             <input type="text" class="form-control" id="project-note" name="note" value="@yield('value-note')">
         </div>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+            @foreach ($technologies as $technology)
+            <input name="technologies[]" type="checkbox" class="btn-check" id="tag-check-{{$technology->id}}" autocomplete="off" value="{{ $technology->id }}"
+            {{ in_array($technology->id, old('technologies',isset($project) ? $project->technologies->pluck('id')->toArray() : [])) ? 'checked' : '' }}>
+            <label class="btn btn-outline-primary" for="tag-check-{{$technology->id}}">{{$technology->name}}</label>
+            @endforeach
+          </div>
         <div class="col-12">
             <button type="submit" class="btn btn-success">@yield('type-of-crud')</button>
         </div>
+
 
     </form>
 </main>

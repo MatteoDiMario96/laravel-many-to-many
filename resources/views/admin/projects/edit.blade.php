@@ -13,9 +13,8 @@
 @endsection
 
 @section('value-data')
-    {{old('project_created_at', $project->project_created_at)}}
+{{ old('project_created_at', $project->project_created_at) }}
 @endsection
-
 @section('value-programming-language')
     {{old('languages_programming_used',$project->languages_programming_used)}}
 @endsection
@@ -27,6 +26,7 @@
 @section('value-note')
     {{old('note',$project->note)}}
 @endsection
+
 
 @section('form-method')
     @method('PUT')
